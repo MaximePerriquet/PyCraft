@@ -3,7 +3,7 @@ import rendering as re
 import environment as en
 import player as pl
 import bindings as bi
-from time import clock, sleep
+import time
 
 class Game:
     def __init__(self):
@@ -28,13 +28,13 @@ class Game:
 
     def run(self):
         while True:
-            t1 = clock()
-            sleep(1/70)
+            t1 = time.perf_counter()
+            time.sleep(1/70)
             ## The player does its controls
             self.__player.bind()  
             ## The bindings do their stuffs                      
             self.__bin.animate()                        
-            t2=clock()
+            t2=time.perf_counter()
              ## Running time
             dt = t2-t1                                 
 

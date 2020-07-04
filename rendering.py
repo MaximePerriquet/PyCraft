@@ -7,15 +7,15 @@ class Texture:
     def getImg(self): return self._img
 class Textures:
     def __init__(self):
-        dirt = Texture('C:\\Users\\maxim\\Desktop\\python\\PyCraft\\dirt.gif')
-        rock = Texture('C:\\Users\\maxim\\Desktop\\python\\PyCraft\\rock.gif')
-        water = Texture('C:\\Users\\maxim\\Desktop\\python\\PyCraft\\water.gif')
-        grass = Texture('C:\\Users\\maxim\\Desktop\\python\\PyCraft\\grass.gif')
-        snowyGrass = Texture('C:\\Users\\maxim\\Desktop\\python\\PyCraft\\snowyGrass.gif')
-        sand = Texture('C:\\Users\\maxim\\Desktop\\python\\PyCraft\\sand.gif')
-        wood = Texture('C:\\Users\\maxim\\Desktop\\python\\PyCraft\\wood.gif')
-        leaf = Texture('C:\\Users\\maxim\\Desktop\\python\\PyCraft\\leaf.gif')
-        redFlower = Texture('C:\\Users\\maxim\\Desktop\\python\\PyCraft\\redFlower.gif')
+        dirt = Texture('.\\dirt.gif')
+        rock = Texture('.\\rock.gif')
+        water = Texture('.\\water.gif')
+        grass = Texture('.\\grass.gif')
+        snowyGrass = Texture('.\\snowyGrass.gif')
+        sand = Texture('.\\sand.gif')
+        wood = Texture('.\\wood.gif')
+        leaf = Texture('.\\leaf.gif')
+        redFlower = Texture('.\\redFlower.gif')
         self.__textures = {'dirt':dirt,'rock':rock,'water':water,'grass':grass,'sand':sand,'wood':wood,'leaf':leaf,'redFlower':redFlower,'snowyGrass':snowyGrass}
     def getDict(self): return self.__textures
 class Camera:
