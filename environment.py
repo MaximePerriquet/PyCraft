@@ -2,7 +2,6 @@ import block as bl
 from random import randint
 import rendering as re
 from math import sin,pi,floor
-import numpy as np
 class Environment:
     def __init__(self,textures):
         self.__chunks = dict()
