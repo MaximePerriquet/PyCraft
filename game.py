@@ -4,11 +4,17 @@ import environment as en
 import player as pl
 import bindings as bi
 import time
+import ctypes
+user32 = ctypes.windll.user32
+
+
 
 class Game:
     def __init__(self):
         self.__win = Tk.Tk()
-        self.__can = Tk.Canvas(self.__win,height=1000,width = 1900,background = '#9FDBFE')
+        height = user32.GetSystemMetrics(1)
+        width = user32.GetSystemMetrics(0)
+        self.__can = Tk.Canvas(self.__win,height=height,width = width,background = '#9FDBFE')
         self.__textures = re.Textures()
         self.__env = en.Environment(self.__textures)
         

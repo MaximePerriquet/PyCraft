@@ -7,15 +7,15 @@ class Texture:
     def getImg(self): return self._img
 class Textures:
     def __init__(self):
-        dirt = Texture('.\\dirt.gif')
-        rock = Texture('.\\rock.gif')
-        water = Texture('.\\water.gif')
-        grass = Texture('.\\grass.gif')
-        snowyGrass = Texture('.\\snowyGrass.gif')
-        sand = Texture('.\\sand.gif')
-        wood = Texture('.\\wood.gif')
-        leaf = Texture('.\\leaf.gif')
-        redFlower = Texture('.\\redFlower.gif')
+        dirt = Texture('.\\Textures\\dirt.gif')
+        rock = Texture('.\\Textures\\rock.gif')
+        water = Texture('.\\Textures\\water.gif')
+        grass = Texture('.\\Textures\\grass.gif')
+        snowyGrass = Texture('.\\Textures\\snowyGrass.gif')
+        sand = Texture('.\\Textures\\sand.gif')
+        wood = Texture('.\\Textures\\wood.gif')
+        leaf = Texture('.\\Textures\\leaf.gif')
+        redFlower = Texture('.\\Textures\\redFlower.gif')
         self.__textures = {'dirt':dirt,'rock':rock,'water':water,'grass':grass,'sand':sand,'wood':wood,'leaf':leaf,'redFlower':redFlower,'snowyGrass':snowyGrass}
     def getDict(self): return self.__textures
 class Camera:

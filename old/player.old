@@ -1,0 +1,112 @@
+from math import floor,exp
+class Player:
+    def __init__(self,name,cam):
+        self.__name = name
+        self.__cam = cam
+        self.__posx = 0
+        self.__posy = 25
+        self.__dx = 0
+        self.__dy = 0
+        self.__chunkNumber = floor(floor(self.__posx+0.5)/16)
+        self.__vx = 0
+        self.__vy = 0
+        self.__walkingVelocity = 5
+        self.__jumpVelocity = 15
+        self.__displayAdress = ''
+        self.__canJump = False
+        self.__canGoLeft = False
+        self.__canGoRight = False
+    def setJump(self):
+        self.__vy += self.__jumpVelocity*self.__canJump
+        self.__canJump = False
+    def setGoRight(self):
+        self.__vx = max(self.__vx + self.__walkingVelocity/4*self.__canJump, self.__walkingVelocity)*self.__canGoRight
+    def setGoLeft(self):
+        self.__vx = min(self.__vx - self.__walkingVelocity/4*self.__canJump, -self.__walkingVelocity)*self.__canGoLeft
+    def stopVelocity(self,coeffx,coeffy):
+        self.__vx = self.__vx*coeffx
+        self.__vy = self.__vy*coeffy
+    def getVx(self): return self.__vx
+    def getVy(self): return self.__vy
+    def getPosx(self): return self.__posx
+    def getPosy(self): return self.__posy
+    def setDx(self,dx): self.__dx = dx
+    def setDy(self,dy): self.__dy = dy
+    def getDx(self): return self.__dx
+    def getDy(self): return self.__dy
+    def getChunkNumber(self): return self.__chunkNumber
+    def getDisplayAdress(self): return self.__displayAdress
+    def setDisplayAdress(self,displayAdress): self.__displayAdress = displayAdress
+    def move(self,dx,dy):
+        self.__posx += dx
+        self.__posy += dy
+        self.__cam.movePlayer(self,dx,dy)
+    def bind(self,env):
+        self.__canJump = False
+        self.__canGoLeft = True
+        self.__canGoRight = True
+
+        #posYTop = floor(self.__posy+2)
+        posYBottom = floor(self.__posy)
+        posXLeft = floor(self.__posx+0.25)
+        posXRight = floor(self.__posx+0.75)
+        posXc = floor(self.__posx+0.5)
+        posYc = floor(self.__posy+0.5)
+
+        playerChunkNumber = floor(posXc/16)
+        self.__chunkNumber = playerChunkNumber
+        playerChunkKey = str(playerChunkNumber)
+        playerChunk = env.getChunks()[playerChunkKey]
+
+        leftChunkNumber = floor(posXLeft/16)
+        leftChunkKey = str(leftChunkNumber)
+        leftChunk = env.getChunks()[leftChunkKey]
+
+        rightChunkNumber = floor(posXRight/16)
+        rightChunkKey = str(rightChunkNumber)
+        rightChunk = env.getChunks()[rightChunkKey]
+        
+        
+        ## Stop falling down if encountering a floor
+        try: 
+            playerChunk.getBlocks()[str(floor(self.__posx+0.3))+'-'+str(floor(self.__posy))]
+            depthError = abs(floor(self.__posy)+1 - self.__posy)
+            self.__vy = max(self.__vy,depthError*20)
+            self.__vx = self.__vx*0.5
+            self.__canJump = True
+        except:
+            try:
+                playerChunk.getBlocks()[str(floor(self.__posx+0.70))+'-'+str(floor(self.__posy))] 
+                depthError = abs(floor(self.__posy)+1 - self.__posy)
+                self.__vy = max(self.__vy,depthError*20)
+                self.__vx = self.__vx*0.5
+                self.__canJump = True
+                
+            except:
+                self.__vy -= 1
+                self.__canJump = False
+
+        
+        
+        ## Stop walking if encountering a wall
+        try:
+            leftChunk.getBlocks()[str(posXLeft)+'-'+str(posYc)] or leftChunk.getBlocks()[str(posXLeft)+'-'+str(posYc+1)]
+            self.__dx = -self.__dx
+            self.__dy = -self.__dy
+            self.move(self.__dx,self.__dy)
+            self.__vx = 0
+            self.__canGoLeft = False
+            self.__canJump = False
+        except:
+            pass
+        try:
+            rightChunk.getBlocks()[str(posXRight)+'-'+str(posYc)] or rightChunk.getBlocks()[str(posXRight)+'-'+str(posYc+1)]
+            self.__dx = -self.__dx
+            self.__dy = -self.__dy
+            self.move(self.__dx,self.__dy)
+            self.__vx = 0
+            self.__canGoRight = False
+            self.__canJump = False
+        except:
+            pass
+    
