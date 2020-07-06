@@ -1,5 +1,7 @@
 import tkinter as Tk
 from math import floor
+import numpy as np
+from PIL import Image,ImageTk
 
 class Texture:
     def __init__(self,path):
@@ -123,4 +125,46 @@ class Camera:
                 self.__env.createChunk(n)
                 self.displayChunk(self.__env.getChunks()[str(n)])
             
+
+def skyColor(time,w,h):
+    size = (100,100)
+    img = Image.new('RGB', size)
+    upColor = [[0,0,0],[0,7,107],[0,65,163],[0,7,107]]
+    downColor = [[0,0,0],[250,196,0],[150, 192, 255],[250,196,0]]
+
+    if time < 50:
+        Cu1 = upColor[0]
+        Cu2 = upColor[1]
+        Cd1 = downColor[0]
+        Cd2 = downColor[1]
+        alpha = (time-0)/50
+    elif time < 100:
+        Cu1 = upColor[1]
+        Cu2 = upColor[2]
+        Cd1 = downColor[1]
+        Cd2 = downColor[2]
+        alpha = (time-50)/50
+    elif time < 150:
+        Cu1 = upColor[2]
+        Cu2 = upColor[3]
+        Cd1 = downColor[2]
+        Cd2 = downColor[3]
+        alpha = (time-100)/50
+    else:
+        Cu1 = upColor[3]
+        Cu2 = upColor[0]
+        Cd1 = downColor[3]
+        Cd2 = downColor[0]
+        alpha = (time-150)/50
+
+    R = np.linspace(Cu1[0]+(Cu2[0]-Cu1[0])*alpha,Cd1[0]+(Cd2[0]-Cd1[0])*alpha,100)
+    G = np.linspace(Cu1[1]+(Cu2[1]-Cu1[1])*alpha,Cd1[1]+(Cd2[1]-Cd1[1])*alpha,100)
+    B = np.linspace(Cu1[2]+(Cu2[2]-Cu1[2])*alpha,Cd1[2]+(Cd2[2]-Cd1[2])*alpha,100)
+    for i in range(100):
+        for j in range(100):
+            color = (int(R[j]),int(G[j]),int(B[j]))
+            img.putpixel((i,j),color)
+    img = img.resize((w*2,h*2))
+    img.save('.\\skies\\sky-'+str(int(time))+'.gif', "GIF")
+    
 

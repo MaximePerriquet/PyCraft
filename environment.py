@@ -262,8 +262,9 @@ class Chunk:
                     self.__blocks[str(rootPosx)+'-'+str(j)] = block
                 for j in range(rootPosy+1+truncHeight,rootPosy+1+truncHeight+randint(2,4)):
                     for i in range(rootPosx-randint(1,2),rootPosx+randint(1,2)):
-                        block = bl.leaf(self.__env,i,j)
-                        self.__blocks[str(i)+'-'+str(j)] = block
+                        if floor(i/16) == self.__chunkNumber:
+                            block = bl.leaf(self.__env,i,j)
+                            self.__blocks[str(i)+'-'+str(j)] = block
     def createFlower(self,flowerPosx,flowerPosy):
         flowerPosKey = str(flowerPosx)+'-'+str(flowerPosy)
         underFlowerPosKey = str(flowerPosx)+'-'+str(flowerPosy-1)
