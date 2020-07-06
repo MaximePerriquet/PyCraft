@@ -7,7 +7,7 @@ import game as ga
 game = ga.Game()
 game.start()
 
-game.run() 
+game.run()
 
 
  

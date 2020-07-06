@@ -1,0 +1,2 @@
+cd C:\Users\Maxime\Documents\GitHub\PyCraft
+pyinstaller --onefile main.py
