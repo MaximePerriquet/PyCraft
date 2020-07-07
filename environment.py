@@ -2,6 +2,10 @@ import block as bl
 from random import randint
 import rendering as re
 from math import sin,pi,floor
+
+## ---------------------- ##
+##|       CLASSES        |##
+## ---------------------- ##
 class Environment:
     ## Here we : 
     # - initiate the environment, 
@@ -18,6 +22,8 @@ class Environment:
         self.__seed = '274879613145787'
         self.__oceanSurfaceAltitude = 20
         self.__snowAltitude = 40
+        self.__maxHeight = 126
+        self.__dayAndNightCycleDuration = 256
         self.__biomesTransitionConstraints = {
             'ocean-plain':self.__oceanSurfaceAltitude+2,
             'ocean-forest':self.__oceanSurfaceAltitude+2,
@@ -27,6 +33,18 @@ class Environment:
             'mountain-ocean':self.__oceanSurfaceAltitude+2
             }
 
+    ## Here we get some useful values
+    def getDayAndNightCyclesDuration(self): return self.__dayAndNightCycleDuration
+    def getSnowAltitude(self): return self.__snowAltitude
+    def getBiomesTransitionsConstraints(self): return self.__biomesTransitionConstraints
+    def getChunksBiomes(self): return self.__chunksBiomes
+    def getOceanSurfaceAltitude(self): return self.__oceanSurfaceAltitude
+    def getSeed(self):return self.__seed
+    def getTextures(self): return self.__textures
+    def getMaxHeight(self): return self.__maxHeight
+    def getChunks(self): return self.__chunks
+    
+    # Here we create the biome suite
     def increaseBiomeSuite(self):
         # Procedural generation of the biome suite
         bMax = len(self.__biomes)
@@ -46,20 +64,6 @@ class Environment:
             self.__chunksBiomes[str(chunkNumber)] = newBiomeRight
         self.__chunksBiomes['right'] = chunkNumber+1
 
-
-
-        
-    
-    ## Here we get some useful values
-    def getSnowAltitude(self): return self.__snowAltitude
-    def getBiomesTransitionsConstraints(self): return self.__biomesTransitionConstraints
-    def getChunksBiomes(self): return self.__chunksBiomes
-    def getOceanSurfaceAltitude(self): return self.__oceanSurfaceAltitude
-    def getSeed(self):return self.__seed
-    def getTextures(self): return self.__textures
-    def getMaxHeight(self): return 126
-    def getChunks(self): return self.__chunks
-    
     ## Here we create a chunk
     def createChunk(self,n):
         chunk = Chunk(self,n)
@@ -69,24 +73,26 @@ class Chunk:
     def __init__(self,env,n):         # 1 chunk = 16 blocks
         self.__env = env
         self.__blocks = dict()
-        self.__active = True
+        self.__active = False
         self.__chunkNumber = n
-        if str(n) in self.__env.getChunksBiomes().keys():
-            pass
-        else:
+
+        # Assign a biome
+        while not str(n) in self.__env.getChunksBiomes().keys():
             self.__env.increaseBiomeSuite()
         self.__biome = self.__env.getChunksBiomes()[str(n)]
+
         self.__Y1 = 0
         self.__Y2 = 0
         self.__y0 = int(self.__env.getSeed())/10**len(self.__env.getSeed())
         self.buildTerrain(n)
     
     ## Here we get some useful values
+    def getChunkNumber(self): return self.__chunkNumber
     def getY1(self): return self.__Y1
     def getY2(self): return self.__Y2
     def getBlocks(self): return self.__blocks
     def getEnv(self): return self.__env
-
+    def isActive(self): return self.__active
     ## Here we display or erase chunk rendering
     def activate(self): 
         self.__active = True
@@ -272,6 +278,10 @@ class Chunk:
             block = bl.redFlower(self.__env,flowerPosx,flowerPosy)
             self.__blocks[flowerPosKey] = block
 
+## ---------------------- ##
+##| ADDITIONAL FUNCTIONS |##
+## ---------------------- ##
+
 ## Here we define useful functions for terrain height generation
 def chaotic(y0,n):
     if n<0:
@@ -285,6 +295,8 @@ def chaotic(y0,n):
         else:
             y0 = 1-(y1-0.66)/0.34
     return y0
+
+# Here we interpolate between control points
 def interpolation(x1,y1,x2,y2,x):
         y1p = 0
         y2p = 0
